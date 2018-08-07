@@ -28,14 +28,14 @@ namespace DatingApp.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserForRegisterDto userDto)
         {
-            userDto.Name = userDto.Name.ToLower();
+            userDto.Username = userDto.Username.ToLower();
 
-            if (await _repo.UserExists(userDto.Name))
+            if (await _repo.UserExists(userDto.Username))
                 return BadRequest("Username already exists.");
 
             var user = new User
             {
-                Name = userDto.Name
+                Username = userDto.Username
             };
 
             var createdUser = await _repo.Register(user, userDto.Password);
@@ -54,7 +54,7 @@ namespace DatingApp.API.Controllers
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
-                new Claim(ClaimTypes.Name, userFromRepo.Name)
+                new Claim(ClaimTypes.Name, userFromRepo.Username)
             };
 
             // JWT secret

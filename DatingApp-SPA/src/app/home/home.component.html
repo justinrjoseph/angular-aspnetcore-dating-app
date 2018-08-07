@@ -1,0 +1,33 @@
+<div class="container mt-5">
+  <ng-template
+    *ngIf="registering; then registrationForm else callToAction">
+  </ng-template>
+
+  <ng-template #callToAction>
+    <div style="text-align: center">
+      <h1>Find your Match</h1>
+
+      <p class="lead">Come on in to view your Matches... Just sign up!</p>
+
+      <div class="text-center">
+        <button
+          class="btn btn-primary btn-lg mr-2"
+          (click)="enableRegistration()">
+          Register
+        </button>
+
+        <button class="btn btn-info btn-lg">Learn more</button>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #registrationForm>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-4">
+          <register (cancelRegistration)="cancelRegistration()"></register>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
