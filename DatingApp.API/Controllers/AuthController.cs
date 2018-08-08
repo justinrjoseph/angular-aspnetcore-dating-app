@@ -46,15 +46,15 @@ namespace DatingApp.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userDto)
         {
-            var userFromRepo = await _repo.Login(userDto.Username.ToLower(), userDto.Password);
+            var user = await _repo.Login(userDto.Username.ToLower(), userDto.Password);
 
-            if (userFromRepo == null) return Unauthorized();
+            if (user == null) return Unauthorized();
 
             // user-specific JWT payload
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
-                new Claim(ClaimTypes.Name, userFromRepo.Username)
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Username)
             };
 
             // JWT secret
