@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
+import { JwtHelperService } from '@auth0/angular-jwt';
+
 import { AuthService } from '../_services/auth.service';
 
 import { User } from '../_models/user';
 
 import { AlertifyService } from '../_services/alertify.service';
-
-import { JwtHelperService } from '@auth0/angular-jwt';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'navbar',
@@ -18,10 +19,12 @@ export class NavbarComponent implements OnInit {
 
   username = '';
   password = '';
+  navUsername;
 
   constructor(
     private _authService: AuthService,
-    private _alertify: AlertifyService
+    private _alertify: AlertifyService,
+    private _router: Router
   ) {}
 
   ngOnInit() {
@@ -30,23 +33,25 @@ export class NavbarComponent implements OnInit {
     if ( token ) {
       this._authService.decodedToken = this._jwt.decodeToken(token);
 
-      this.username = this._authService.decodedToken.unique_name;
+      this.navUsername = this._authService.decodedToken.unique_name;
     }
   }
 
   login() {
     this._authService.login(new User(this.username, this.password))
       .subscribe(
-        (next) => {
-          this._alertify.success('Logged in successfully.');
-        },
-        (error) => this._alertify.error(error)
+        (next) => this._alertify.success('Logged in successfully.'),
+        (error) => this._alertify.error(error),
+        () => this._router.navigate(['/members'])
       );
   }
 
   logout() {
     localStorage.removeItem('token');
+
     this._alertify.message('logged out');
+
+    this._router.navigate(['/']);
   }
 
   loggedIn() {
