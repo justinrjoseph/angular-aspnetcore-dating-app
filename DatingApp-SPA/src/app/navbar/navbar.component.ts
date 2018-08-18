@@ -4,8 +4,6 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { AuthService } from '../_services/auth.service';
 
-import { User } from '../_models/user';
-
 import { AlertifyService } from '../_services/alertify.service';
 import { Router } from '@angular/router';
 
@@ -38,7 +36,7 @@ export class NavbarComponent implements OnInit {
   }
 
   login() {
-    this._authService.login(new User(this.username, this.password))
+    this._authService.login({ username: this.username, password: this.password })
       .subscribe(
         (next) => this._alertify.success('Logged in successfully.'),
         (error) => this._alertify.error(error),

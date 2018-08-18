@@ -3,8 +3,6 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { AlertifyService } from '../_services/alertify.service';
 
-import { User } from '../_models/user';
-
 @Component({
   selector: 'register',
   templateUrl: './register.component.html',
@@ -25,7 +23,7 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
-    this._authService.register(new User(this.username, this.password))
+    this._authService.register({ username: this.username, password: this.password })
       .subscribe(
         () => this._alertify.success('registration successful'),
         (error) => this._alertify.error(error)
