@@ -38,7 +38,7 @@ export class NavbarComponent implements OnInit {
   login() {
     this._authService.login({ username: this.username, password: this.password })
       .subscribe(
-        (next) => this._alertify.success('Logged in successfully.'),
+        () => this._alertify.success('Logged in successfully.'),
         (error) => this._alertify.error(error),
         () => this._router.navigate(['/members'])
       );

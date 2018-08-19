@@ -20,6 +20,7 @@ import { MessagesComponent } from './messages/messages.component';
 
 import { ErrorInterceptorProvider } from './_services/error.interceptor';
 import { MemberDetailComponent } from './members/member-detail/member-detail.component';
+import { MemberEditComponent } from './members/member-edit/member-edit.component';
 
 function tokenGetter() {
   return localStorage.getItem('token');
@@ -51,7 +52,8 @@ function tokenGetter() {
     ListsComponent,
     MessagesComponent,
     MemberCardComponent,
-    MemberDetailComponent
+    MemberDetailComponent,
+    MemberEditComponent
   ],
   providers: [ErrorInterceptorProvider],
   bootstrap: [AppComponent]
