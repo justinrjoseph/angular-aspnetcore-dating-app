@@ -35,6 +35,8 @@
 
     <ng-template #userDropdown>
       <div dropdown class="dropdown">
+        <img [src]="navThumbnail" [alt]="navUsername" class="mr-1">
+
         <a dropdownToggle class="dropdown-toggle text-light">
           Welcome {{ navUsername | titlecase }}
         </a>

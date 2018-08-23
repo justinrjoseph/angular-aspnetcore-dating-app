@@ -7,6 +7,8 @@ import { AuthService } from '../_services/auth.service';
 import { AlertifyService } from '../_services/alertify.service';
 import { Router } from '@angular/router';
 
+import { User } from '../_models/user';
+
 @Component({
   selector: 'navbar',
   templateUrl: './navbar.component.html',
@@ -17,7 +19,8 @@ export class NavbarComponent implements OnInit {
 
   username = '';
   password = '';
-  navUsername;
+  navThumbnail: string;
+  navUsername: string;
 
   constructor(
     private _authService: AuthService,
@@ -27,12 +30,22 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     const token = localStorage.getItem('token');
+    const user: User = JSON.parse(localStorage.getItem('user'));
 
     if ( token ) {
       this._authService.decodedToken = this._jwt.decodeToken(token);
 
       this.navUsername = this._authService.decodedToken.unique_name;
     }
+
+    if ( user ) {
+      this._authService.currentUser = user;
+      this._authService.changeNavPhoto(user.photoUrl);
+
+      this.navThumbnail = user.photoUrl;
+    }
+
+    this._authService.newNavPhoto.subscribe((url) => this.navThumbnail = url);
   }
 
   login() {
@@ -46,6 +59,10 @@ export class NavbarComponent implements OnInit {
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
+
+    this._authService.decodedToken = null;
+    this._authService.currentUser = null;
 
     this._alertify.message('logged out');
 

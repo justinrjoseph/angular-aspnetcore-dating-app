@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
 import { BsDropdownModule, TabsModule } from 'ngx-bootstrap';
 import { NgxGalleryModule } from 'ngx-gallery';
+import { FileUploadModule } from 'ng2-file-upload';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -21,6 +22,7 @@ import { MessagesComponent } from './messages/messages.component';
 import { ErrorInterceptorProvider } from './_services/error.interceptor';
 import { MemberDetailComponent } from './members/member-detail/member-detail.component';
 import { MemberEditComponent } from './members/member-edit/member-edit.component';
+import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
 
 function tokenGetter() {
   return localStorage.getItem('token');
@@ -41,7 +43,8 @@ function tokenGetter() {
     FormsModule,
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
-    NgxGalleryModule
+    NgxGalleryModule,
+    FileUploadModule
   ],
   declarations: [
     AppComponent,
@@ -53,7 +56,8 @@ function tokenGetter() {
     MessagesComponent,
     MemberCardComponent,
     MemberDetailComponent,
-    MemberEditComponent
+    MemberEditComponent,
+    PhotoEditorComponent
   ],
   providers: [ErrorInterceptorProvider],
   bootstrap: [AppComponent]

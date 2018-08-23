@@ -17,6 +17,8 @@ import { AlertifyService } from '../../_services/alertify.service';
 })
 export class MemberEditComponent implements OnInit {
   user: User;
+  photoUrl: string;
+
   @ViewChild('f') form: NgForm;
 
   @HostListener('window:beforeunload', ['$event']) unloadNotification($event: Event) {
@@ -34,6 +36,8 @@ export class MemberEditComponent implements OnInit {
 
   ngOnInit() {
     this._route.data.subscribe((data) => this.user = data['user']);
+
+    this._authService.newNavPhoto.subscribe((url) => this.photoUrl = url);
   }
 
   updateUser() {
@@ -47,5 +51,9 @@ export class MemberEditComponent implements OnInit {
         },
         (error) => this._alertify.error(error)
       );
+  }
+
+  updateMainPhoto(url: string) {
+    this.user.photoUrl = url;
   }
 }
