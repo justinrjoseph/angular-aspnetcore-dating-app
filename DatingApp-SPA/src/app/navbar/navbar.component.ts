@@ -19,6 +19,7 @@ export class NavbarComponent implements OnInit {
 
   username = '';
   password = '';
+
   navThumbnail: string;
   navUsername: string;
 
@@ -37,6 +38,9 @@ export class NavbarComponent implements OnInit {
 
       this.navUsername = this._authService.decodedToken.unique_name;
     }
+
+    this._authService.newNavUsername
+        .subscribe((username) => this.navUsername = username);
 
     if ( user ) {
       this._authService.currentUser = user;
@@ -58,6 +62,9 @@ export class NavbarComponent implements OnInit {
   }
 
   logout() {
+    this.username = '';
+    this.password = '';
+
     localStorage.removeItem('token');
     localStorage.removeItem('user');
 

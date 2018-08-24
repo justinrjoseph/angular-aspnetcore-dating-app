@@ -59,6 +59,8 @@ export class PhotoEditorComponent implements OnInit {
         const photo = { ...res };
 
         this.photos = [...this.photos, photo];
+
+        if ( photo.isMain ) this._updateMainPhoto(photo);
       }
     };
   }
@@ -73,10 +75,7 @@ export class PhotoEditorComponent implements OnInit {
           this.currentMain.isMain = false;
           photo.isMain = true;
 
-          this._authService.changeNavPhoto(photo.url);
-          this._authService.currentUser.photoUrl = photo.url;
-
-          localStorage.setItem('user', JSON.stringify(this._authService.currentUser));
+          this._updateMainPhoto(photo);
 
           this._alertify.success('You have a new main photo.');
         },
@@ -94,5 +93,12 @@ export class PhotoEditorComponent implements OnInit {
           () => this._alertify.error('There was a problem deleting the photo.')
         );
     });
+  }
+
+  private _updateMainPhoto(photo): void {
+    this._authService.changeNavPhoto(photo.url);
+    this._authService.currentUser.photoUrl = photo.url;
+
+    localStorage.setItem('user', JSON.stringify(this._authService.currentUser));
   }
 }

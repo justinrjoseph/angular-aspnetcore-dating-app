@@ -21,12 +21,16 @@ export class AuthService {
 
   decodedToken: Jwt;
   currentUser: User;
+
+  navUsername = new BehaviorSubject<string>('user');
+  newNavUsername = this.navUsername.asObservable();
+
   photoUrl = new BehaviorSubject<string>('../../assets/user.png');
   newNavPhoto = this.photoUrl.asObservable();
 
   constructor(private _http: HttpClient) {}
 
-  register(user) {
+  register(user: User) {
     return this._http.post(`${this._url}/register`, user);
   }
 
@@ -43,6 +47,7 @@ export class AuthService {
             this.decodedToken = this._jwt.decodeToken(token);
             this.currentUser = appUser;
 
+            this._updateNavUsername(this.currentUser.knownAs);
             this.changeNavPhoto(this.currentUser.photoUrl);
           }
         })
@@ -57,5 +62,9 @@ export class AuthService {
 
   changeNavPhoto(url: string) {
     this.photoUrl.next(url);
+  }
+
+  private _updateNavUsername(username: string) {
+    this.navUsername.next(username);
   }
 }

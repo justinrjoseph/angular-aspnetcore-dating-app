@@ -1,7 +1,10 @@
 <div class="card mb-4">
   <div class="card-img-wrapper">
     <a [routerLink]="['/members', user.id]">
-      <img [src]="user.photoUrl" [alt]="user.knownAs" class="card-img-top">
+      <img
+        [src]="user.photoUrl || '../../../assets/user.png'"
+        [alt]="user.knownAs"
+        class="card-img-top">
     </a>
 
 
