@@ -14,6 +14,9 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class MemberListResolver implements Resolve<User[]> {
+  pageNumber = 1;
+  pageSize = 5;
+
   constructor(
     private _userService: UserService,
     private _router: Router,
@@ -21,7 +24,7 @@ export class MemberListResolver implements Resolve<User[]> {
   ) {}
 
   resolve(): Observable<User[]> {
-    return this._userService.getAll()
+    return this._userService.getAll(this.pageNumber, this.pageSize)
       .pipe(
         catchError((error) => {
           this._alertify.error(error);

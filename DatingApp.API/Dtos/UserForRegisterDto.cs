@@ -5,11 +5,6 @@ namespace DatingApp.API.Dtos
 {
     public class UserForRegisterDto
     {
-        public UserForRegisterDto()
-        {
-            Created = DateTime.Now;
-            LastActive = DateTime.Now;
-        }
         [Required]
         public string Gender { get; set; }
 
@@ -33,5 +28,11 @@ namespace DatingApp.API.Dtos
         public string Password { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastActive { get; set; }
+
+        public UserForRegisterDto()
+        {
+            Created = DateTime.Now;
+            LastActive = DateTime.Now;
+        }
     }
 }

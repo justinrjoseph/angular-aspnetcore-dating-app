@@ -34,13 +34,13 @@ export class NavbarComponent implements OnInit {
     const user: User = JSON.parse(localStorage.getItem('user'));
 
     if ( token ) {
+      this._authService.newNavUsername
+        .subscribe((username) => this.navUsername = username);
+
       this._authService.decodedToken = this._jwt.decodeToken(token);
 
       this.navUsername = this._authService.decodedToken.unique_name;
     }
-
-    this._authService.newNavUsername
-        .subscribe((username) => this.navUsername = username);
 
     if ( user ) {
       this._authService.currentUser = user;
