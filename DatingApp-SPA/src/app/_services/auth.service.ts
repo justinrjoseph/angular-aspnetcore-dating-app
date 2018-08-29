@@ -65,7 +65,6 @@ export class AuthService {
   }
 
   private _updateNavUsername(username: string) {
-    console.log('service', username);
     this.navUsername.next(username);
   }
 }

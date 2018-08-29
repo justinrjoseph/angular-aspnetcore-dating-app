@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Resolve, Router, ActivatedRouteSnapshot } from '@angular/router';
+import { Resolve, Router } from '@angular/router';
 
 import { User } from '../_models/user';
 
@@ -22,7 +22,7 @@ export class MemberEditResolver implements Resolve<User> {
     private _alertify: AlertifyService
   ) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<User> {
+  resolve(): Observable<User> {
     const id = +this._authService.decodedToken.nameid;
 
     return this._userService.get(id)

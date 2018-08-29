@@ -126,5 +126,64 @@ namespace DatingApp.API.Data
                     .Select(u => u.LikeeId);
             }
         }
+
+        public async Task<Message> GetMessage(int id)
+        {
+            return await _context.Messages.FirstOrDefaultAsync(m => m.Id == id);
+        }
+
+        public async Task<PagedList<Message>> GetUserMessages(MessageParams msgParams)
+        {
+            var messages = _context.Messages
+                .Include(u => u.Sender)
+                .ThenInclude(u => u.Photos)
+                .Include(u => u.Recipient)
+                .ThenInclude(u => u.Photos)
+                .AsQueryable();
+
+            switch (msgParams.Container)
+            {
+                case "Inbox":
+                    messages = messages
+                        .Where(u => u.RecipientId == msgParams.UserId
+                            && !u.RecipientDeleted);
+                    break;
+                case "Outbox":
+                    messages = messages
+                        .Where(u => u.SenderId == msgParams.UserId
+                            && !u.SenderDeleted);
+                    break;
+                default:
+                    messages = messages
+                        .Where(u => u.RecipientId == msgParams.UserId
+                            && !u.IsRead && !u.RecipientDeleted);
+                    break;
+            }
+
+            messages = messages.OrderByDescending(d => d.DateSent);
+
+            return await PagedList<Message>.CreateAsync(
+                messages, msgParams.PageNumber, msgParams.PageSize
+            );
+        }
+
+        public async Task<IEnumerable<Message>> GetMessageThread(int userId, int recipientId)
+        {
+            var messages = await _context.Messages
+                .Include(u => u.Sender)
+                .ThenInclude(u => u.Photos)
+                .Include(u => u.Recipient)
+                .ThenInclude(u => u.Photos)
+                .Where(m => m.RecipientId == userId
+                        && !m.RecipientDeleted
+                        && m.SenderId == recipientId
+                        || m.RecipientId == recipientId
+                        && !m.SenderDeleted
+                        && m.SenderId == userId)
+                .OrderByDescending(m => m.DateSent)
+                .ToListAsync();
+
+            return messages;
+        }
     }
 }

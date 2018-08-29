@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Resolve, Router, ActivatedRouteSnapshot } from '@angular/router';
+import { Resolve, Router } from '@angular/router';
 
 import { User } from '../_models/user';
 

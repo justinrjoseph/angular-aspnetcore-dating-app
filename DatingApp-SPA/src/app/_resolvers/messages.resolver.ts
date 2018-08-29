@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 
 import { Resolve, Router } from '@angular/router';
 
-import { User } from '../_models/user';
+import { Message } from '../_models/message';
 
-import { UserService } from '../_services/user.service';
+import { AuthService } from '../_services/auth.service';
+import { MessageService } from '../_services/message.service';
 import { AlertifyService } from '../_services/alertify.service';
 
 import { Observable, of } from 'rxjs';
@@ -13,20 +14,23 @@ import { catchError } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class ListResolver implements Resolve<User[]> {
+export class MessagesResolver implements Resolve<Message[]> {
   pageNumber = 1;
   pageSize = 5;
-  likesParams = 'Likers';
+  container = 'Unread';
 
   constructor(
-    private _userService: UserService,
+    private _authService: AuthService,
+    private _messageService: MessageService,
     private _router: Router,
     private _alertify: AlertifyService
   ) {}
 
-  resolve(): Observable<User[]> {
-    return this._userService
-      .getAll(this.pageNumber, this.pageSize, null, this.likesParams)
+  resolve(): Observable<Message[]> {
+    const userId = this._authService.decodedToken.nameid;
+
+    return this._messageService
+      .getAll(userId, this.pageNumber, this.pageSize, this.container)
       .pipe(
         catchError((error) => {
           this._alertify.error(error);

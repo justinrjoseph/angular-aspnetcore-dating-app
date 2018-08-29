@@ -1,0 +1,93 @@
+<div class="card">
+  <div class="card-body">
+    <div *ngIf="!messages?.length">
+      <p>No messages yet... say hello below!</p>
+    </div>
+
+    <ul *ngIf="messages?.length" class="chat">
+      <li *ngFor="let message of messages">
+        <ng-template
+          *ngIf="message.senderId === recipientId; then toThem else toMe">
+        </ng-template>
+
+        <!-- to them -->
+        <ng-template #toThem>
+          <div>
+            <span class="chat-img float-left">
+              <img
+                [src]="message.senderPhotoUrl"
+                [alt]="message.senderKnownAs"
+                class="rounded-circle">
+            </span>
+
+            <div class="chat-body">
+              <div class="header">
+                <strong class="primary-font">{{ message.senderKnownAs }}</strong>
+                <small class="text-muted float-right">
+                  <span class="fa fa-clock-o">{{ message.dateSent | timeAgo }}</span>
+                </small>
+              </div>
+
+              <p>{{ message.content }}</p>
+            </div>
+          </div>
+        </ng-template>
+
+        <!-- to me -->
+        <ng-template #toMe>
+          <div>
+            <span class="chat-img float-right">
+              <img
+                [src]="message.senderPhotoUrl"
+                [alt]="message.senderKnownAs"
+                class="rounded-circle">
+            </span>
+
+            <div class="chat-body">
+              <div class="header">
+                <small class="text-muted">
+                  <span class="fa fa-clock-o">{{ message.dateSent | timeAgo }}</span>
+
+                  <ng-template
+                    *ngIf="message.isRead; then read else unread">
+                  </ng-template>
+
+                  <ng-template #unread>
+                    <span class="text-danger">(unread)</span>
+                  </ng-template>
+
+                  <ng-template #read>
+                    <span class="text-success">(Read {{ message.dateRead | timeAgo }})</span>
+                  </ng-template>
+                </small>
+                <strong class="primary-font float-right">
+                  {{ message.senderKnownAs }}
+                </strong>
+              </div>
+
+              <p>{{ message.content }}</p>
+            </div>
+          </div>
+        </ng-template>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card-footer">
+    <form #f="ngForm" (ngSubmit)="sendMessage(f.value)">
+      <div class="input-group">
+        <input
+          type="text"
+          name="content"
+          class="form-control input-sm"
+          placeholder="send a message!"
+          [(ngModel)]="message.content"
+          required>
+
+        <div class="input-group-append">
+          <button class="btn btn-primary" [disabled]="f.invalid">Send</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
